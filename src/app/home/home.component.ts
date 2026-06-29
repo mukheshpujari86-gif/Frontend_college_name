@@ -13,8 +13,13 @@ export class HomeComponent implements OnInit {
 
    constructor (private router: Router,private API:AngularAPIService){}
 
+   showProfileDropdown = false;
     students:any[]=[];
     isLoading = true;
+
+    adminName = '';
+    adminPassword = '';
+    adminInitial = '';
 
     //pagenation
     
@@ -32,6 +37,9 @@ export class HomeComponent implements OnInit {
 
   //sort
    ngOnInit(): void {
+     this.adminName = localStorage.getItem('adminName') || '';
+     this.adminPassword = localStorage.getItem('adminPassword') || '';
+    this.adminInitial = this.adminName.charAt(0).toUpperCase();
      this.getStudents();
    }
 
@@ -41,74 +49,22 @@ export class HomeComponent implements OnInit {
 
    getStudents():void{
     this.isLoading = true;
-    // this.API.getServiceStudent().subscribe(
-    //      (data) => {
-    //     this.students=data
-        
-
     //pAGINtion
-    this.API.getServiceStudent().subscribe((data) => {
-    this.allStudents = data;           // store full data
-    this.totalRecords = data.length;   // total count
-
-    this.applySorting();               // apply sort
-    this.applyPagination();            // apply pagination
-    //PAGINATION
-    
-        //sort
-        
-        // this.allStudents =data.sort((a:any,b:any)=>
-        //   a.name.localeCompare(b.name)  || 
-        //   a.department.localeCompare(b.department)
-        // );
-
-        //sort
-
-        this.isLoading = false;
-    });
-
-//     getStudents(): void {
-//   this.isLoading = true;
-
-//   this.API.getServiceStudent().subscribe((data) => {
-
-//     if (data && data.length > 0) {
-//       this.students = data;
-//     } else {
-//       this.students = [];
-//       console.log('No data found');
-//     }
-
-//     this.isLoading = false;
-
-//   }, (error) => {
-
-//     console.error('Error occurred:', error);
-//     this.students = [];
-//     this.isLoading = false;
-
-//   });
-// }
-    // this.API.getServiceStudent().subscribe(
-    //   (data) => {
-    //     // fetch logic
-    //     this.students=data
-    //     this.isLoading = false;
-    //   })
-   
+    this.API.getStudentsByAdmin(this.adminName).subscribe({
+    next: (data: any[]) => {
+      this.allStudents = data;
+      this.totalRecords = data.length;
+      this.currentPage = 1;
+      this.applyPagination();
+      this.isLoading = false;
+      console.log('Students fetched successfully:', data);
+    },
+    error: (err) => {
+      console.error(err);
+      this.isLoading = false;
     }
-
-    // sort
-
-    applySorting() {
-    this.allStudents.sort((a: any, b: any) => 
-      a.name.localeCompare(b.name) 
-
-    );
-  }
-
-  //sort
-
+  });
+}
     //pagination logic
 
     applyPagination() {
@@ -135,7 +91,7 @@ previousPage() {
   //pagination logic
 
     deleteStudents(id: number,index: number): void {
-    if (confirm('Are you sure you want to delete this region?')) {
+    if (confirm('Are you sure you want to delete this College details?')) {
     this.API.deleteServiceStudent(id).subscribe(
       () => {
         //console.log(`Region with id ${id} deleted successfully.`);
@@ -153,6 +109,20 @@ editStudent(student: any) {
   this.router.navigate(['/about'], {
     state: { student: student }
   });
+}
+
+toggleProfileDropdown() {
+  this.showProfileDropdown = !this.showProfileDropdown;
+}
+
+logout() {
+  localStorage.clear();
+  sessionStorage.clear();
+  this.router.navigate(['/']);
+}
+
+goToProfile(){
+  this.router.navigate(['/about']);
 }
 
   }

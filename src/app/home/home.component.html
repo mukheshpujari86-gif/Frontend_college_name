@@ -1,6 +1,36 @@
 <br>
 <button class="btn btn-primary mb-3" (click)="about()">Add</button>
 <!-- 🔄 Loading -->
+
+<!-- <div class="profile" (click)="logout()">
+  <div class="profile-circle">
+    {{ adminInitial }}
+  </div> -->
+  <!-- <span>{{ adminName }}</span> -->
+<!-- </div> -->
+
+<div class="profile-wrapper">
+  <div class="profile-circle" (click)="toggleProfileDropdown()">
+    {{ adminInitial }}
+  </div>
+
+  
+  <div class="profile-dropdown" *ngIf="showProfileDropdown">
+    
+    <div class="dropdown-name">
+      {{ adminName }}
+    </div>
+
+
+
+    <button type="button" class="dropdown-item" (click)="logout()">
+      Logout
+    </button>
+  </div>
+</div>
+
+<!-- <button class="btn btn-danger" (click)="logout()">Logout</button> -->
+
 <div *ngIf="isLoading" class="text-center mt-3">
   <div class="spinner-border text-primary"></div>
 </div>
@@ -8,9 +38,11 @@
   <thead>
     <tr>
         <th>SR No</th>
-      <th>Name</th>
-      <th>Department</th>
-      <th>Roll Number</th>
+      <th>College Admin</th>
+      <th>College Name</th>
+      <th>College Area</th>
+      <th class="d-none">Password</th>
+      <th>College Code</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -19,12 +51,12 @@
     <!-- <tr *ngFor="let student of students; "> -->
      <tr *ngFor="let student of students; let i = index"> 
         <td>{{i+1}}</td>
+        <td>{{ student.admin | lowercase }}</td>
       <td>{{ student.name | lowercase }}</td>  <!--pipe -->
-      <td>{{ student.department }}</td>
-      <td>{{ student.rollNumber }}</td>
+      <td>{{ student.college_Area }}</td>
+      <td class="d-none">{{ student.passsword }}</td>
+      <td>{{ student.college_code }}</td>
       <td>
-         <!-- <button class="btn btn-warning btn-sm" (click)="editStudent(student.id)">Edit</button> -->
-        <!-- <button class="btn btn-danger btn-sm" (click)="deleteStudents(student.id)">Delete</button> -->
          <button class="btn btn-primary btn-sm"
         (click)="editStudent(student)">
   Update

@@ -1,12 +1,12 @@
-<p>{{ selectedStudentId ? 'Update Data' : 'Add Data' }}</p>
+<p>Registration</p>
 
 
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-  <div class="mb-3" >
+  <div class="mb-3">
     <label>College Admin</label>
-    <input type="text" class="form-control" formControlName="admin" readonly>
+    <input type="text" class="form-control" formControlName="admin">
     <div *ngIf="form.get('admin')?.touched">
          <div *ngIf="form.get('admin')?.errors?.['required']" class="text-danger">
             Admin is required
@@ -33,20 +33,6 @@
   </div>
 
   <div class="mb-3">
-    <label>College Code</label>
-    <input type="text" class="form-control" formControlName="college_Code">
-    <div *ngIf="form.get('college_Code')?.touched">
-         <div *ngIf="form.get('college_Code')?.errors?.['required']" class="text-danger">
-            College Code is required
-        </div>
-        <div *ngIf="form.get('college_Code')?.errors?.['pattern']" class="text-danger">
-            Only alphanumeric characters allowed
-        </div>
-    </div>
-
-  </div>
-
-   <div class="mb-3">
     <label>College Area</label>
     <input type="text" class="form-control" formControlName="college_Area">
     <div *ngIf="form.get('college_Area')?.touched">
@@ -60,9 +46,9 @@
 
   </div>
 
-  <div class="mb-3" *ngIf="!selectedStudentId">
+  <div class="mb-3">
     <label>Password</label>
-    <input type="text" class="form-control" formControlName="password" readonly>
+    <input type="text" class="form-control" formControlName="password">
     <div *ngIf="form.get('password')?.touched">
          <div *ngIf="form.get('password')?.errors?.['required']" class="text-danger">
             Password is required
@@ -75,10 +61,9 @@
   </div>
 
 
-<button type="submit" class="btn btn-primary">
+<button class="btn btn-primary">
   {{ selectedStudentId ? 'Update' : 'Submit' }}
-</button>
-&nbsp;&nbsp;&nbsp;
+</button>&nbsp;&nbsp;&nbsp;
     <button type="submit" class="btn btn-primary" (click)="home()">
       Back
     </button>

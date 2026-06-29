@@ -4,11 +4,11 @@ import { AngularAPIService } from '../API/angular-api.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-about',
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class AboutComponent implements OnInit {
+export class RegisterComponent implements OnInit {
   form!: FormGroup;
 selectedStudentId: number | null = null;
 students:any[]=[];
@@ -16,51 +16,30 @@ students:any[]=[];
    constructor (private router: Router,private fb: FormBuilder,private API:AngularAPIService){}
 
    ngOnInit() {
-  this.createForm();
+    this.createForm();
 
-  const data = history.state?.student;
-   const loggedInAdmin = localStorage.getItem('adminName') || '';
-   const loggedInPassword = localStorage.getItem('adminPassword') || '';
-
+     const data = history.state?.student;
+      //console.log(history.state);
   if (data) {
-    console.log('Received student data:', data);
-    console.log('College code:', data.college_Code);
-    console.log('College area:', data.college_Area);
-    
     this.selectedStudentId = data.id;
 
     this.form.patchValue({
       admin: data.admin,
       name: data.name,
       college_Area: data.college_Area,
-      college_Code: data.college_Code,
-      //password: data.password
+      password: data.password
     });
-    
-     this.form.get('password')?.clearValidators();
-    this.form.get('password')?.updateValueAndValidity();
-  } else {
-    // Insert mode
-    this.form.patchValue({
-      admin: loggedInAdmin,
-      password: loggedInPassword
+  }
+  }
+
+  createForm() {
+    this.form = this.fb.group({
+        admin: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+        name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+  college_Area: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+  password: ['', [Validators.required, Validators.minLength(6)]]
     });
-
-    //this.form.get('admin')?.disable();
-    this.form.get('password')?.clearValidators();
-    this.form.get('password')?.updateValueAndValidity();
-  } 
-}
-
-createForm() {
-  this.form = this.fb.group({
-    admin: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
-    name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
-    college_Area: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
-    college_Code: ['', [Validators.required]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
-  });
-}
+  }
 
     getStudents():void{
     //this.isLoading = true;
@@ -72,12 +51,6 @@ createForm() {
   }
 
   onSubmit() {
-    if (this.form.invalid) {
-    this.form.markAllAsTouched();
-    return;
-  }
-
-   const formData = { ...this.form.value };
     if (this.form.valid) {
       if (this.selectedStudentId) {
       // 🔥 UPDATE
@@ -112,7 +85,7 @@ createForm() {
   }
 
     home(){
-    this.router.navigate(['/home']);
+    this.router.navigate(['/']);
    }
 
 
